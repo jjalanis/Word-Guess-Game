@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hangmeat Game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+
+<style>
+    .beef0{
+    background-image: url(../images/beef0.png);
+}
+.beef1{
+    background-image: url(../images/beef1.png);
+}
+.beef2{
+    background-image: url(../images/beef2.png);
+}
+.beef3{
+    background-image: url(../images/beef3.png);
+}
+.beef4{
+    background-image: url(../images/beef4.png);
+}
+.beef5{
+    background-image: url(../images/beef5.png);
+}
+.beef6{
+    background-image: url(../images/beef6.png);
+}
+.beef7{
+    background-image: url(../images/beef7.png);
+    background-color: blueviolet;
+}
+
+
+</style>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+        <h1 class="display-4">Meat Guess Game</h1>
+        <p class="lead">Know your meat. Guess the cut of beef and kwow where it comes. Bon Appetite</p>
+        <button type="button" class="btn btn-primary btn-lg start">START</button>
+        <button type="button" class="btn btn-secondary btn-lg reset">RESET</button>
+        </div>
+    </div>
+    <!--Area de juego-->
+    <div class="container">
+        <div class="row">
+        <!--Area de imagen-->
+          <div class="col-sm-12 col-md-5">
+            <div id="cow" style="background-color: aquamarine; height: 100px;"></div>
+          </div>
+        <!--Area de palabras-->
+          <div class="col-sm-12 col-md-7">
+            <div id="game"></div>
+          </div>
+        </div>
+      </div>
+
+    <p id="word">WORD 1</p>
+    <button class="guess_word" type="button">Start</button>
+
+
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+    
+
+    $(".start").on("click", function(){
+        console.log("INICIO JUEGO");
+        var cowimg = $("<div>");
+        cowimg = cowimg.addClass("beef7");
+        $("#cow").append(cowimg);
+    })
+
+
+var cut = {
+    "word" : [
+        "ribeye",
+        "ribs",
+        "porterhouse",
+        "t-bone",
+        "sirloin",
+        "picanha",
+        "brisket",
+        "bistek",
+        "skirtsteak"
+    ],
+    "where" : [
+        "This cut comes for the ribs of the beef",
+        "This cut comes for the ribs of the beef (obiously)",
+        "This cut comes from the Short Loin",
+        "This cut comes from the Short Loin",
+        "This cut comes from the Round",
+        "This cut comes from the Round. Also known as Tip Sirloin",
+        "This cut comes from the Brisket",
+        "This cut comes from hte Chuck. Also knwon as 7 Bistek",
+        "This cut comes from the Flank. Also known as Arrachera"
+    ] 
+};
+
+function startgame (){
+    console.log("start")
+    var index = Math.floor((Math.random() * cut.word.length) + 1);
+    var w = cut.word[index];
+    var p = cut.where[index];
+    var step = $("<newdiv>");
+    step.addCass("beef0");
+    $(".cow").append(step);
+    console.log(w);
+    console.log(p);
+    return {w:w,p:p}
+};
+})
+</script>
+
+<!--<script src="./assets/javascript/game.js"></script>-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</body>
+</html>
