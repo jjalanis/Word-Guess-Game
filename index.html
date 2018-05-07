@@ -82,14 +82,11 @@
     font-size: 50px;
 }
 
-
-
 </style>
 <body>
-    <div class="jumbotron jumbotron-fluid">
+    <div class="jumbotron jumbotron-fluid" style="background-image: url(./assets/images/cover.jpg); background-position: center center; background-repeat: no-repeat">
         <div class="container">
-        <h1 class="display-8">KNOW YOUR CUTS</h1>
-        <p class="lead">Know your meat. Guess the cut of beef and kwow where it comes.</p>
+        <h1 class="display-8" style="color: white">KNOW YOUR CUTS</h1>
         <button type="button" class="btn btn-primary btn-lg start">START</button>
         <button type="button" class="btn btn-secondary btn-lg reset">RESET</button>
         </div>
@@ -223,7 +220,7 @@ $(document).ready(function() {
             }
         }
         document.getElementById("guessword").innerHTML = cut.letters.join(' ');
-        win();
+        setTimeout(win, 3000);
     }
     var incorrect = function(guessedKey){
         console.log("Entro a funcion de equivocaciones  LETRA  " + guessedKey);
@@ -232,8 +229,7 @@ $(document).ready(function() {
         console.log("Oportunidades actuales máx 7 = " + oportunity);
         oportunityCow(oportunity);
         document.getElementById("usedWords").innerHTML = "You already used " + cut.incorrectwords.join();
-        win ();
-        
+        setTimeout(win, 3000);
      }
     var win = function (){
         if (cut.letters.indexOf("_")===-1){
