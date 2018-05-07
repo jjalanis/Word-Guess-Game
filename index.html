@@ -88,8 +88,8 @@
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-        <h1 class="display-4">Meat Guess Game</h1>
-        <p class="lead">Know your meat. Guess the cut of beef and kwow where it comes. Bon Appetite</p>
+        <h1 class="display-8">Know your cuts</h1>
+        <p class="lead">Know your meat. Guess the cut of beef and kwow where it comes.</p>
         <button type="button" class="btn btn-primary btn-lg start">START</button>
         <button type="button" class="btn btn-secondary btn-lg reset">RESET</button>
         </div>
@@ -105,10 +105,10 @@
           <div class="col-sm-12 col-md-7">
             <div id="game">
                 <div class="row">
-                <h3 id=guessword style=" text-align: center; font-size: 80px;"></h3>
+                <h3 id=guessword style=" text-align: center; font-size: 80px; width: 100%;"></h3>
                 </div>
                 <div class="row">
-                <p id="usedWords"></p>
+                <p id="usedWords" style="text-align: center; color: red; font-size: 40px; width: 100%;"></p>
                 </div>
             </div>
           </div>
@@ -117,21 +117,22 @@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
-      $(document).ready(function() {
+
+$(document).ready(function() {
     var oportunity;
     var cowimg;
     var started = 0;
     var cut = {
-    "word" : ["ribeye","ribs","porterhouse","t-bone","sirloin","picanha","brisket","bistek","skirtsteak"],
+    "word" : ["ribeye","ribs","porterhouse","tbone","sirloin","picanha","brisket","bistek","skirtsteak"],
     "where" : ["This cut comes for the ribs of the beef","This cut comes for the ribs of the beef (obiously)","This cut comes from the Short Loin","This cut comes from the Short Loin","This cut comes from the Round","This cut comes from the Round. Also known as Tip Sirloin","This cut comes from the Brisket","This cut comes from hte Chuck. Also knwon as 7 Bistek","This cut comes from the Flank. Also known as Arrachera"],
     "game" : ["",""],
     "correctwords" :[],
     "incorrectwords" : [],
-
-};
+    "letters" : [],
+    };
 
     if (started != 1) {
-        started=1;
+        started=0;
         console.log("Valor started" + started);
         $("#cow").empty();
         cowimg = $("<div>");
@@ -139,6 +140,8 @@
     }
 
     var wordtoguess = $(".start").on("click", function(){
+        cleanall();
+        started=1;
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef0"))
@@ -161,16 +164,16 @@
 
     var initialize = function(word){
         console.log("Entro a funcion de inicio. Palabra " + word);
-        line = "";
+        oportunity=0;
         for (var i=0; i<word.length;i++) {
             console.log("entro vez " + i);
-            var line = " _ " + line;
-            console.log(line);
+            cut.letters.push("_");
         }
-            document.getElementById("guessword").innerHTML = line;
+            document.getElementById("guessword").innerHTML = cut.letters.join(' ');
     }
 
      $(document).keyup(function(key) {
+         if (started === 1){
          var guessedKeyCode = key.keyCode;
          if (guessedKeyCode >=65 && guessedKeyCode <= 90){ //Code to validate that a letter was selected
          var guessedkey = key.key.toLowerCase();
@@ -202,82 +205,120 @@
                 if (helper2 == 0){
                     cut.incorrectwords.push(guessedkey);
                     console.log("Letras incorrectas " + cut.incorrectwords);
-                    oportunity++;
-                    console.log("Oportunidades actuales máx 7 = " + oportunity);
                 }
-               // incorrect (cut.game[1].chartAt(i));
+               incorrect (guessedkey);
                 console.log("Letra incorrecta " + guessedkey);
             }
         } 
+    }
     });
 
     var correct = function(guessedKey){
         console.log("Entro a funcion de impresion de Letra" + guessedKey);
         var wordtoguess = cut.game[1];
-        var line = "";
         for (var i=0; i<wordtoguess.length;i++) {
-            console.log("entro vez impresion " + i);
             if ( guessedKey === wordtoguess.charAt(i)){
-                console.log("Encontro el caracter a cambiar. Es el ");
-                line = line + guessedKey;
+                cut.letters[i]=guessedKey;
             }
-            else{
-                var line = " _ " + line;
-                console.log("enctro al else");
-            }
-            console.log(line);
         }
-            document.getElementById("guessword").innerHTML = line;
+        document.getElementById("guessword").innerHTML = cut.letters.join(' ');
+        win();
     }
+    var incorrect = function(guessedKey){
+        console.log("Entro a funcion de equivocaciones  LETRA  " + guessedKey);
+        oportunity++;
+        console.log(oportunity);
+        console.log("Oportunidades actuales máx 7 = " + oportunity);
+        oportunityCow(oportunity);
+        document.getElementById("usedWords").innerHTML = "You already used " + cut.incorrectwords.join();
+        win ();
+        
+     }
+    var win = function (){
+        if (cut.letters.indexOf("_")===-1){
+            alert("YOU WIN. The word was "+ cut.game[1] + " " + cut.game[2]);
 
+        }  
+            else if (oportunity === 7)
+            {
+            alert("YOU LOST. The word was "+ cut.game[1] + " " + cut.game[2]);
+            }
+        }
+    
+        
     $(".reset").on("click", function(){
+        cleanall();
         $("#cow").empty();
         started= 0;
         var oportunity = 0;
-        console.log("Valor started" + started);
+        console.log("Valor started de reset " + started);
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef"));
-    });
-
-    var oportunityCow = function() {
-        if (oportunity=1){
+        cut.game = ["",""];
+        cut.correctwords = [];
+        cut.incorrectwords = [];
+        cut.letters = [];
+        document.getElementById("guessword").innerHTML = cut.letters.join(' ');
+        document.getElementById("usedWords").innerHTML = cut.incorrectwords.join();
+        });
+    
+    var cleanall = function (){
+        $("#cow").empty();
+        started= 0;
+        var oportunity = 0;
+        console.log("Valor started de reset " + started);
+        cowimg = $("<div>");
+        $("#cow").append(cowimg.addClass("beef"));
+        cut.game = ["",""];
+        cut.correctwords = [];
+        cut.incorrectwords = [];
+        cut.letters = [];
+        document.getElementById("guessword").innerHTML = cut.letters.join(' ');
+        document.getElementById("usedWords").innerHTML = cut.incorrectwords.join();
+    }
+    var oportunityCow = function(oportunity) {
+        console.log("Entro a animacion de vaca" + " con oportunidad = " + oportunity);
+        if (oportunity===1){
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef1"));
         }
-        if (oportunity=2){
+        if (oportunity===2){
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef2"));
         }
-        if (oportunity=3){
+        if (oportunity===3){
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef3"));
         }
-        if (oportunity=4){
+        if (oportunity===4){
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef4"));
         }
-        if (oportunity=5){
+        if (oportunity===5){
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef5"));
         }
-        if (oportunity=6){
+        if (oportunity===6){
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef6"));
         }
-        if (oportunity=7){
+        if (oportunity===7){
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef7"));
+        theend();
         }
     };
 
+    var theend = function(){
 
+    }
 
 
 })
