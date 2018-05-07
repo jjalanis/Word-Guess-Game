@@ -88,7 +88,7 @@
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-        <h1 class="display-8">Know your cuts</h1>
+        <h1 class="display-8">KNOW YOUR CUTS</h1>
         <p class="lead">Know your meat. Guess the cut of beef and kwow where it comes.</p>
         <button type="button" class="btn btn-primary btn-lg start">START</button>
         <button type="button" class="btn btn-secondary btn-lg reset">RESET</button>
@@ -105,10 +105,10 @@
           <div class="col-sm-12 col-md-7">
             <div id="game">
                 <div class="row">
-                <h3 id=guessword style=" text-align: center; font-size: 80px; width: 100%;"></h3>
+                <h3 id=guessword style=" text-align: center; font-size: 60px; width: 100%;"></h3>
                 </div>
                 <div class="row">
-                <p id="usedWords" style="text-align: center; color: red; font-size: 40px; width: 100%;"></p>
+                <p id="usedWords" style="text-align: center; color: red; font-size: 30px; width: 100%;"></p>
                 </div>
             </div>
           </div>
@@ -130,7 +130,8 @@ $(document).ready(function() {
     "incorrectwords" : [],
     "letters" : [],
     };
-
+    
+    // Iniciaizacion de imagen
     if (started != 1) {
         started=0;
         console.log("Valor started" + started);
@@ -138,40 +139,39 @@ $(document).ready(function() {
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef"));
     }
-
-    var wordtoguess = $(".start").on("click", function(){
+    
+    // Funcion al oprimir boton START
+    $(".start").on("click", function(){
         cleanall();
+        initialize (cut.game[1]);
+
+    });
+
+    // Despliega palabra incial con _ _ _ _ 
+    var initialize = function()
+    {
         started=1;
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef0"))
         console.log("start");
-        oportunity=0;
-        var index = 0;
-        index = Math.floor((Math.random() * cut.word.length) + 1);
-        var w ="";
-        var p ="";
-        w = cut.word[index];
-        p = cut.where[index];
-        cut.game[1]=w;
-        cut.game[2]=p;
+        var index = index = Math.floor((Math.random() * cut.word.length) + 1);
+        cut.game[1]=cut.word[index];;
+        cut.game[2]=cut.where[index];
         console.log(cut.game[1] + " se guardo en objeto");
         console.log(cut.game[2] + " se guardo en objeto");
-        initialize (cut.game[1]);
-
-    });
-
-
-    var initialize = function(word){
+        word = cut.game[1];
         console.log("Entro a funcion de inicio. Palabra " + word);
         oportunity=0;
-        for (var i=0; i<word.length;i++) {
+        for (var i=0; i<word.length;i++) 
+        {
             console.log("entro vez " + i);
             cut.letters.push("_");
         }
-            document.getElementById("guessword").innerHTML = cut.letters.join(' ');
+        document.getElementById("guessword").innerHTML = cut.letters.join(' ');
     }
 
+    // Funcion que escucha letras. Solo funciona si el juago ya inicio y solo acepta letras del abecedario.
      $(document).keyup(function(key) {
          if (started === 1){
          var guessedKeyCode = key.keyCode;
@@ -180,21 +180,21 @@ $(document).ready(function() {
          var wordtoguess = cut.game[1];
          console.log(wordtoguess);
          console.log("Selecciono letra " + guessedkey + " codigo " + guessedKeyCode);
-         var helper = 0;
+         var helper = 0; // temporal para no entrar a funcion de NO correcto si la palabra tiene una o mas letras
          for (var i = 0; i < wordtoguess.length; i++) 
          {
             if ( guessedkey === wordtoguess.charAt(i))
             { 
-                correct(guessedkey); 
                 console.log("Letra correcta " + guessedkey);
                 helper = 1;
-                cut.correctwords.push(guessedkey);
+                cut.correctwords.push(guessedkey); 
                 console.log("se guardo en objeto letra CORRECTA " + guessedkey);
+                correct(guessedkey); // funcion de correcto
             } 
         }
-            if (helper == 0)
+            if (helper == 0) // Si nunca entro a correcto pasa a incorrecto
             {
-                var helper2 =0;
+                var helper2 =0; // temporal para no aceptar letras repetidas
                 for (i=0; i<cut.incorrectwords.length; i++)
                 {
                     if (guessedkey === cut.incorrectwords[i]){
@@ -202,11 +202,12 @@ $(document).ready(function() {
                         console.log("LETRA REPETIDA");
                     }
                 }
-                if (helper2 == 0){
+                if (helper2 == 0) // si no es repetida, la guarda en letras incorrectas
+                {
                     cut.incorrectwords.push(guessedkey);
                     console.log("Letras incorrectas " + cut.incorrectwords);
                 }
-               incorrect (guessedkey);
+                incorrect (guessedkey); // funciona de incorrecto
                 console.log("Letra incorrecta " + guessedkey);
             }
         } 
@@ -237,11 +238,15 @@ $(document).ready(function() {
     var win = function (){
         if (cut.letters.indexOf("_")===-1){
             alert("YOU WIN. The word was "+ cut.game[1] + " " + cut.game[2]);
+            cleanall();
+            initialize();
 
         }  
             else if (oportunity === 7)
             {
             alert("YOU LOST. The word was "+ cut.game[1] + " " + cut.game[2]);
+            cleanall();
+            initialize();
             }
         }
     
@@ -312,13 +317,9 @@ $(document).ready(function() {
         $("#cow").empty();
         cowimg = $("<div>");
         $("#cow").append(cowimg.addClass("beef7"));
-        theend();
         }
     };
 
-    var theend = function(){
-
-    }
 
 
 })
